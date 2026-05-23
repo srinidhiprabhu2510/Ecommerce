@@ -26,4 +26,12 @@ public class CartController {
         }
         return  ResponseEntity.badRequest().body("Product out of stock or User not found.");
     }
+
+    @DeleteMapping("/items/{productId}")
+    public ResponseEntity<Void> removeFromCart(
+            @RequestHeader("X-User-ID") String userId,
+            @PathVariable Long productId){
+        Boolean deleted = cartService.deleteItemFromCart(userId, productId);
+        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    }
 }

@@ -8,6 +8,7 @@ import com.app.ecom.repository.CartItemsRepository;
 import com.app.ecom.repository.ProductRepository;
 import com.app.ecom.repository.UserRepository;
 import com.app.ecom.service.CartService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class CartServiceImpl  implements CartService {
 
     @Autowired
@@ -69,4 +71,18 @@ public class CartServiceImpl  implements CartService {
         }
         return true;
     }
+
+    @Override
+    public Boolean deleteItemFromCart(String userId, Long productId) {
+        Optional<Product> products = productRepository.findById(productId);
+        Optional<User> userOpt = userRepository.findById(Long.valueOf(userId));
+
+        if(userOpt.isPresent() && products.isPresent()){
+            cartItemsRepository.deleteByUserAndProduct(userOpt.get(), products.get());
+            return true;
+        }
+
+        return false;
+    }
+
 }

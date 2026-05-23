@@ -5,4 +5,6 @@ import com.app.ecom.dto.CartItemsRequest;
 public interface CartService {
 
     boolean addToCart(String userId, CartItemsRequest cartItemsRequest);
+
+    Boolean deleteItemFromCart(String userId, Long productId);
 }
