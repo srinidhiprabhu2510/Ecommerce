@@ -17,6 +17,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Override
     public ProductResponse createProduct(ProductRequest productRequest){
         Product product = new Product();
         updateProductFromRequest(product, productRequest);
@@ -24,6 +26,7 @@ public class ProductServiceImpl implements ProductService {
         return mapTosavedProduct(product1);
     }
 
+    @Override
     public Optional<ProductResponse> updateProduct(Long id, ProductRequest productRequest){
         return productRepository.findById(id)
                 .map(existingProduct -> {
@@ -34,11 +37,13 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
+    @Override
     public List<ProductResponse> getAllProducts(){
         return productRepository.findByActiveTrue().stream()
                 .map(this::mapTosavedProduct).collect(Collectors.toList());
     }
 
+    @Override
     public boolean deleteProduct(Long id){
         return productRepository.findById(id)
                 .map(product -> {
@@ -48,6 +53,7 @@ public class ProductServiceImpl implements ProductService {
                 }).orElse(false);
     }
 
+    @Override
     public List<ProductResponse> searchProducts(String keyword){
         return productRepository.searchProducts(keyword).stream().map(this::mapTosavedProduct).collect(Collectors.toList());
     }

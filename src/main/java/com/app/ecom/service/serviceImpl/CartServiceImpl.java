@@ -93,4 +93,9 @@ public class CartServiceImpl  implements CartService {
                 .orElse(List.of());
     }
 
+    @Override
+    public void clearCart(String userId) {
+        userRepository.findById(Long.valueOf(userId)).ifPresent(user -> cartItemsRepository.deleteByUser(user));
+    }
+
 }

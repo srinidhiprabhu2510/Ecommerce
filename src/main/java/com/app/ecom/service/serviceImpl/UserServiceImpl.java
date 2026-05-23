@@ -20,19 +20,21 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Override
     public Optional<UserResponse> getUser(Long id){
         return userRepository.findById(id)
                 .map(this::maptoUserResponse);
 
     }
 
+    @Override
     public List<UserResponse> getAllUsers(){
         return userRepository.findAll().stream()
                 .map(this::maptoUserResponse).
                 collect(Collectors.toList());
     }
 
-
+    @Override
     public void createUsers(UserRequest userRequest) {
         User user = new User();
         updateUserFromRequest(user, userRequest);
@@ -40,6 +42,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    @Override
     public boolean updatedUser(Long id, UserRequest updateUser){
         return userRepository.findById(id)
                 .map(existingUser -> {updateUserFromRequest(existingUser, updateUser);
