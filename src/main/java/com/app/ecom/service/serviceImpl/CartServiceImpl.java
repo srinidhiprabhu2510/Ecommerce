@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -83,6 +84,13 @@ public class CartServiceImpl  implements CartService {
         }
 
         return false;
+    }
+
+    @Override
+    public List<CartItems> getCartItems(String userId) {
+        return userRepository.findById(Long.valueOf(userId))
+                .map(cartItemsRepository::findByUser)
+                .orElse(List.of());
     }
 
 }
