@@ -26,7 +26,7 @@ public class User {
     private UserRole userRole = UserRole.CUSTOMER;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "address_table", referencedColumnName = "id")
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 
     @CreationTimestamp

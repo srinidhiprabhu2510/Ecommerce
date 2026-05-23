@@ -8,6 +8,10 @@ import com.app.ecom.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -18,6 +22,34 @@ public class ProductServiceImpl implements ProductService {
         updateProductFromRequest(product, productRequest);
         Product product1 = productRepository.save(product);
         return mapTosavedProduct(product1);
+    }
+
+    public Optional<ProductResponse> updateProduct(Long id, ProductRequest productRequest){
+        return productRepository.findById(id)
+                .map(existingProduct -> {
+                    updateProductFromRequest(existingProduct, productRequest);
+                    Product product = productRepository.save(existingProduct);
+                    return mapTosavedProduct(product);
+                });
+
+    }
+
+    public List<ProductResponse> getAllProducts(){
+        return productRepository.findByActiveTrue().stream()
+                .map(this::mapTosavedProduct).collect(Collectors.toList());
+    }
+
+    public boolean deleteProduct(Long id){
+        return productRepository.findById(id)
+                .map(product -> {
+                    product.setActive(false);
+                    productRepository.save(product);
+                    return true;
+                }).orElse(false);
+    }
+
+    public List<ProductResponse> searchProducts(String keyword){
+        return productRepository.searchProducts(keyword).stream().map(this::mapTosavedProduct).collect(Collectors.toList());
     }
 
     private ProductResponse mapTosavedProduct(Product product1) {
